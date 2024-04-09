@@ -1,11 +1,9 @@
 package org.example;
 
-import java.util.Stack;
-
 public class MyStringBuilder {
     private char[] chars;
     private int length;
-    private Stack<char[]> snapshots = new Stack<>();
+    private SnapshotsRepository snapshotsRepository = new SnapshotsRepositoryImpl();
 
     public MyStringBuilder() {
         this(16);
@@ -24,19 +22,13 @@ public class MyStringBuilder {
         return length;
     }
     public MyStringBuilder undo() {
-        if (!snapshots.isEmpty()) {
-            chars = snapshots.pop();
+            chars = snapshotsRepository.getSnapshot(chars, length);
             length = chars.length;
-        } else {
-            throw new IllegalStateException("No snapshots available for undo.");
-        }
         return this;
     }
 
     private void takeSnapshot() {
-        char[] snapshot = new char[length];
-        System.arraycopy(chars, 0, snapshot, 0, length);
-        snapshots.push(snapshot);
+        snapshotsRepository.takeSnapshot(chars, length);
     }
 
     public MyStringBuilder append(String str) {

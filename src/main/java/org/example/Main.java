@@ -13,6 +13,9 @@ public class Main {
         sb.delete(0, 6);
         System.out.println(sb.toString());
 
+        sb.undo();
+        System.out.println(sb.toString());
+
         sb.reverse();
         System.out.println(sb.toString());
 
